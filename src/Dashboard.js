@@ -18,15 +18,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import {Button, Input, ListItem, ListItemIcon, ListItemText, Tab, Tabs} from "@mui/material";
+import {Input, ListItem, ListItemIcon, ListItemText, Tab} from "@mui/material";
 import logo from './logo.svg';
 import history from './history';
 import {useState} from "react";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import UnstyledButtonCustom from "./CoolButton";
 import Watcher from "./Watcher";
-import {Chart} from "react-google-charts";
-import {theme} from "./App";
+
 
 function Copyright(props) {
   return (
@@ -40,80 +39,6 @@ function Copyright(props) {
       </Typography>
   );
 }
-const fakeloads = [
-  [
-    "Name",
-    "Belegte Kapazität in kg",
-    "Lieferung in kg",
-    "Verbleibende Kapazität in kg"
-  ],
-  [
-    "RWW GMBH",
-    1844,
-    1086,
-    2370
-  ],
-  [
-    "SIEBTECHNIK GMBH",
-    1754,
-    90,
-    3456
-  ],
-  [
-    "Dachdecker-Einkauf-West",
-    1735,
-    19,
-    3546
-  ],
-  [
-    "Schauenburg Maschinen",
-    1451,
-    284,
-    3565
-  ],
-  [
-    "HEIKO KARSCHTI",
-    1394,
-    57,
-    3849
-  ],
-  [
-    "WALZER ELEKTRONIK",
-    1192,
-    202,
-    3906
-  ],
-  [
-    "HELIX GMBH",
-    1104,
-    88,
-    4108
-  ],
-  [
-    "Lindenau Full Tank Services Gm",
-    1050,
-    54,
-    4196
-  ],
-  [
-    "ITG Fulfillment GmbH",
-    1050,
-    0,
-    4146
-  ],
-  [
-    "Kältetechnik Berens",
-    104,
-    1050,
-    4146
-  ],
-  [
-    "DEPOT",
-    104,
-    0,
-    5196
-  ]
-];
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -160,10 +85,10 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-const url = 'localhost:10000/'
 function DashboardContent() {
   const [open, setOpen] = useState(true);
   const [value, setValue] = useState('1');
+  const [plannings, setPlanningData] = useState([]);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -181,11 +106,19 @@ function DashboardContent() {
   const onReaderLoad = (event) => {
     const data = JSON.parse(event.target.result);
     console.log("done ", data)
+    const url = 'localhost:10000/api/loads_profile'
 
     //TODO SEND DATA FROM HERE TO API!
-   /* fetch('someurl', data)
+    Promise.resolve(data)
+        .then(() => {
+          console.log("you are here")
+          setPlanningData([...plannings, [[10, 9, 7, 6, 5, 0], [10, 5, 4, 2, 1, 0]]]);
+          setValue('3');
+        })
+  /*  fetch(url, data)
         .then((response) => {
           console.log(response);
+           setPlanningData([...plannings, response.data.data]);
         })
         .catch(err => {
 
@@ -274,66 +207,37 @@ function DashboardContent() {
             <Toolbar />
             <Box sx={{ width: '100%', typography: 'body1' }}>
               <TabContext value={value}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider',  position:'sticky', top:0 }}>
                   <TabList onChange={handleChange} aria-label="lab API tabs example">
                     <Tab label="Historical Data" value="1" />
                     <Tab label="New Upload" value="2" />
                     <Tab label="Plannings" value="3" />
                   </TabList>
                 </Box>
-       {/*         <Chart
-                    chartType="ColumnChart"
-                    explorer={{
-                      actions: ['dragToZoom', 'rightClickToReset'],
-                      axis: 'horizontal',
-                    }}
-                    data={fakeloads}
-                    options={{
-                      title: '',
-                      legend: { position: 'bottom', textStyle: { fontSize: 12 } },
-                      backgroundColor: 'transparent',
-                      isStacked: true,
-                      colors: [
-                        theme.palette.warning.main, //  occupied capacity
-                        theme.palette.info.main, // station load
-                        theme.palette.error.light, // pickup load
-                        theme.palette.success.main, // remaining capacity
-                      ],
-                      chartArea: {left:0,top:0,width:'100%',height:'100%'},
-                      ticks: [
-                        { v: 1, f: 'Quant' },
-                        { v: 2, f: 'Verbal' },
-                        { v: 3, f: 'Total' },
-                      ],
-                    }}
-                    graph_id="Loads"
-                    width="100%"
-                    height="500px"
-                />*/}
-
-
                 <TabPanel value="1">
-                  <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                  <Container maxWidth="lg" sx={{ mt: 4, mb: 4, textAlign:'left' }}>
                     <Grid container spacing={3}>
                       {sliced.map(({given, returned}, i) =>
-                      <React.Fragment key={i}>
-                        <Grid item xs={6}>
-                          <Typography variant={'h5'}>
-                            Initial Planning
-                          </Typography>
-                          <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                            <Watcher id={`before-${i}`} loads={given} />
-                          </Paper>
-                        </Grid>
-                        <Grid item xs={6}>
-                          <Typography variant={'h5'}>
-                            Dispatcher Update
-                          </Typography>
-                          <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                            <Watcher id={`after-${i}`} loads={returned} />
-                          </Paper>
-                        </Grid>
-                    </React.Fragment>
+                        <React.Fragment key={i}>
+                          <Grid item xs={6}>
+                            <Typography variant={'h5'}>
+                              Initial Planning Result
+                            </Typography>
+                            <br/>
+                            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                              <Watcher id={`before-${i}`} loads={given} />
+                            </Paper>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography variant={'h5'}>
+                              Dispatcher Update
+                            </Typography>
+                            <br/>
+                            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                              <Watcher id={`after-${i}`} loads={returned} />
+                            </Paper>
+                          </Grid>
+                      </React.Fragment>
                       )}
                     </Grid>
                     <Copyright sx={{ pt: 4 }} />
@@ -351,6 +255,43 @@ function DashboardContent() {
                   </label>
                 </TabPanel>
                 <TabPanel value="3" style={{textAlign:"left"}}>
+                  <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                    <Grid container spacing={3} justifyContent={'center'}>
+                      {!plannings.length ?
+                          <Box sx={{textAlign: 'center' }}>
+                            <Typography variant={'h5'}>
+                              No plannings yet :-(
+                            </Typography>
+                            <br/>
+                            <img src="https://media.giphy.com/media/hEc4k5pN17GZq/giphy.gif" alt="this slowpoke moves"  width="500" />
+                          </Box>
+                      : null}
+                      {plannings.map(([before, after], i) =>
+                          <React.Fragment key={i}>
+                            <Grid item xs={6}>
+                              <Typography variant={'h5'}>
+                                Without AI
+                              </Typography>
+                              <br/>
+                              <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                                <Watcher id={`before-${i}`} loads={before} />
+                              </Paper>
+                            </Grid>
+                            <Grid item xs={6}>
+                              <Typography variant={'h5'}>
+                                With AI
+                              </Typography>
+                              <br/>
+
+                              <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                                <Watcher id={`after-${i}`} loads={after} />
+                              </Paper>
+                            </Grid>
+                          </React.Fragment>
+                      )}
+                    </Grid>
+                    <Copyright sx={{ pt: 4 }} />
+                  </Container>
                 </TabPanel>
               </TabContext>
             </Box>

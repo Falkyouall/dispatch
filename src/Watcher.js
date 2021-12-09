@@ -4,12 +4,11 @@ import {Chart} from "react-google-charts";
 export default function Watcher(props) {
   const loads = props.loads || [];
   const max = Math.max(...loads);
-  const data = loads.map((load, i) => [`Load-${i}`, load, max-load]);
-
+  const data = loads.map((load, i) => [`Load-${i+1}`, load, max-load]);
   data.unshift([
     "Name",
-    "Belegte Kapazität in kg",
-    "Lieferung in kg",
+    "Occupied",
+    "Left Capacity"
   ])
   return (
       <Chart
