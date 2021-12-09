@@ -113,8 +113,10 @@ function DashboardContent() {
     //TODO DELETE ME WHEN DONE
     Promise.resolve(data)
         .then(() => {
-          console.log("you are here")
-          setPlanningData([...plannings, [[10, 9, 7, 6, 5, 0], [10, 5, 4, 2, 1, 0]]]);
+          setPlanningData([
+              ...plannings,
+              [[10, 9, 7, 6, 5, 0], [10, 5, 4, 2, 1, 0]]
+          ]);
           setValue('3');
         })
 
