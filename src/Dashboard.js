@@ -92,6 +92,10 @@ function DashboardContent() {
   const [plannings, setPlanningData] = useState([]);
   const [slice ,setSlice] = useState(Values.slice(0, 10))
 
+/*  useEffect(() => {
+    setPlanningData([...plannings, [[5,1,2,1,1],[7,5,1,1,5],[8,7,3,5,5,5,5]]])
+  }, [])*/
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -108,44 +112,26 @@ function DashboardContent() {
 
   const onReaderLoad = (event) => {
     const data = JSON.parse(event.target.result);
-    console.log("done ", data)
-    const url = 'loads_profile'
+    const url = 'http://localhost:10000/loads_profile'
 
-    //TODO DELETE ME WHEN DONE
-  /*  Promise.resolve(data)
-        .then(() => {
-          setPlanningData([
-              ...plannings,
-              [[10, 9, 7, 6, 5, 0], [10, 5, 4, 2, 1, 0]]
-          ]);
-          setValue('3');
-        })
-*/
   // TODO UNCOMMENT ME AND MAKE ME WORK
     fetch(url, {
       method: 'POST',
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
       headers: {
         'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
       },
-      redirect: 'follow', // manual, *follow, error
-      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
+      body: JSON.stringify(data)
     })
       .then((response) => response.json())
       .then(response => {
         console.log(response);
-        setPlanningData([...plannings, response.data]);
+        setPlanningData([...plannings, response]);
         setValue('3');
       })
         .catch(err => {
             console.log(err);
       })
   };
-
 
   function handleChangePage(e, page) {
     setSlice(Values.slice(page * 10, (page + 1) * 10))
