@@ -21,7 +21,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import {Input, ListItem, ListItemIcon, ListItemText, Pagination, Stack, Tab} from "@mui/material";
 import logo from './logo.svg';
 import history from './history';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import UnstyledButtonCustom from "./CoolButton";
 import Watcher from "./Watcher";
@@ -105,13 +105,14 @@ function DashboardContent() {
     reader.readAsText(event.target.files[0]);
   };
 
+
   const onReaderLoad = (event) => {
     const data = JSON.parse(event.target.result);
     console.log("done ", data)
-    const url = 'localhost:10000/api/loads_profile'
+    const url = 'loads_profile'
 
     //TODO DELETE ME WHEN DONE
-    Promise.resolve(data)
+  /*  Promise.resolve(data)
         .then(() => {
           setPlanningData([
               ...plannings,
@@ -119,9 +120,9 @@ function DashboardContent() {
           ]);
           setValue('3');
         })
-
+*/
   // TODO UNCOMMENT ME AND MAKE ME WORK
-    /*fetch(url, {
+    fetch(url, {
       method: 'POST',
       mode: 'cors', // no-cors, *cors, same-origin
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -134,13 +135,15 @@ function DashboardContent() {
       referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
       body: JSON.stringify(data) // body data type must match "Content-Type" header
     })
-      .then((response) => {
+      .then((response) => response.json())
+      .then(response => {
         console.log(response);
-        setPlanningData([...plannings, response.data.data]);
+        setPlanningData([...plannings, response.data]);
         setValue('3');
-      }).catch(err => {
+      })
+        .catch(err => {
             console.log(err);
-      })*/
+      })
   };
 
 
