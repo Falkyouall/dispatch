@@ -18,7 +18,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import {Input, ListItem, ListItemIcon, ListItemText, Tab} from "@mui/material";
+import {Input, ListItem, ListItemIcon, ListItemText, Pagination, Stack, Tab} from "@mui/material";
 import logo from './logo.svg';
 import history from './history';
 import {useState} from "react";
@@ -84,11 +84,13 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
       },
     }),
 );
+const Values = Object.values(history).filter(x => x.changed === true);
 
 function DashboardContent() {
   const [open, setOpen] = useState(true);
   const [value, setValue] = useState('1');
   const [plannings, setPlanningData] = useState([]);
+  const [slice ,setSlice] = useState(Values.slice(0, 10))
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -108,26 +110,41 @@ function DashboardContent() {
     console.log("done ", data)
     const url = 'localhost:10000/api/loads_profile'
 
-    //TODO SEND DATA FROM HERE TO API!
+    //TODO DELETE ME WHEN DONE
     Promise.resolve(data)
         .then(() => {
           console.log("you are here")
           setPlanningData([...plannings, [[10, 9, 7, 6, 5, 0], [10, 5, 4, 2, 1, 0]]]);
           setValue('3');
         })
-  /*  fetch(url, data)
-        .then((response) => {
-          console.log(response);
-           setPlanningData([...plannings, response.data.data]);
-        })
-        .catch(err => {
 
-        })*/
+  // TODO UNCOMMENT ME AND MAKE ME WORK
+    /*fetch(url, {
+      method: 'POST',
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json'
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      redirect: 'follow', // manual, *follow, error
+      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      body: JSON.stringify(data) // body data type must match "Content-Type" header
+    })
+      .then((response) => {
+        console.log(response);
+        setPlanningData([...plannings, response.data.data]);
+        setValue('3');
+      }).catch(err => {
+            console.log(err);
+      })*/
   };
 
-  const Values = Object.values(history).filter(x => x.changed === true);
-  const sliced = Values.slice(0, 10);
-  // console.log(sliced);
+
+  function handleChangePage(e, page) {
+    setSlice(Values.slice(page * 10, (page + 1) * 10))
+  }
   return (
 
         <Box sx={{ display: 'flex' }}>
@@ -217,7 +234,7 @@ function DashboardContent() {
                 <TabPanel value="1">
                   <Container maxWidth="lg" sx={{ mt: 4, mb: 4, textAlign:'left' }}>
                     <Grid container spacing={3}>
-                      {sliced.map(({given, returned}, i) =>
+                      {slice.map(({given, returned}, i) =>
                         <React.Fragment key={i}>
                           <Grid item xs={6}>
                             <Typography variant={'h5'}>
@@ -240,6 +257,17 @@ function DashboardContent() {
                       </React.Fragment>
                       )}
                     </Grid>
+                    <br/>
+
+                    <Stack spacing={2}>
+                      <Paper>
+                        <Box sx={{p: 2, justifyContent:'center', display:'flex'}}>
+                          <Pagination
+                              onChange={handleChangePage}
+                              count={(Values.length/10)-1} variant="outlined" color="primary" />
+                        </Box>
+                      </Paper>
+                    </Stack>
                     <Copyright sx={{ pt: 4 }} />
                   </Container>
                 </TabPanel>
