@@ -25,7 +25,7 @@ import {useEffect, useState} from "react";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import UnstyledButtonCustom from "./CoolButton";
 import Watcher from "./Watcher";
-
+import Presentation from "./Presentation";
 
 function Copyright(props) {
   return (
@@ -133,9 +133,9 @@ function DashboardContent() {
     setSlice(Values.slice(page * 10, (page + 1) * 10))
   }
   return (
-
         <Box sx={{ display: 'flex' }}>
           <CssBaseline />
+          <Presentation open={openDialog} onClose={() => setDialog(false)}/>
           <AppBar position="absolute" open={openDrawer} color={'primary'}>
             <Toolbar
                 sx={{
