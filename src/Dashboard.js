@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
@@ -9,19 +9,17 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import DashboardOutlined from '@mui/icons-material/DashboardOutlined';
 import {Input, ListItem, ListItemIcon, ListItemText, ListSubheader, Pagination, Stack, Tab} from "@mui/material";
 import logo from './logo.svg';
 import history from './history';
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import UnstyledButtonCustom from "./CoolButton";
 import Watcher from "./Watcher";
@@ -88,7 +86,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const Values = Object.values(history).filter(x => x.changed === true);
 
 function DashboardContent() {
-  const [openDrawer, setOpenDrawer] = useState(true);
+  const [openDrawer, setOpenDrawer] = useState(false);
   const [openDialog, setDialog] = useState(false);
   const [value, setValue] = useState('1');
   const [plannings, setPlanningData] = useState([]);
@@ -96,6 +94,9 @@ function DashboardContent() {
 
   const toggleDrawer = () => {
     setOpenDrawer(!openDrawer);
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 500);
   };
 
   const handleChange = (event, newValue) => {
@@ -119,7 +120,7 @@ function DashboardContent() {
       .then((res) => res.json())
       .then(response => {
         console.log({response})
-        setPlanningData([...plannings, response]);
+        setPlanningData( response);
         setValue('3');
       })
         .catch(err => {
@@ -283,28 +284,39 @@ function DashboardContent() {
                             <img src="https://media.giphy.com/media/hEc4k5pN17GZq/giphy.gif" alt="this slowpoke moves"  width="500" />
                           </Box>
                       : null}
-                      {value === '3' && plannings.map(([[before, after]], i) =>
-                          <React.Fragment key={i}>
-                            <Grid item xs={6}>
-                              <Typography variant={'h5'}>
-                                Without AI
-                              </Typography>
-                              <br/>
-                              <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                                <Watcher id={`before-ai-${i}`} loads={before} />
-                              </Paper>
-                            </Grid>
-                            <Grid item xs={6}>
-                              <Typography variant={'h5'}>
-                                With AI
-                              </Typography>
-                              <br/>
+                      {plannings.length > 0 ?
+                          <Grid item xs={12}>
+                            <Typography variant={'h5'}>
+                              Based on historical data
+                            </Typography>
+                          </Grid>
+                          : null}
+                      {plannings.map((arr, i) => {
+                        const same = JSON.stringify(arr[1]) === JSON.stringify(arr[0]);
+                        return (
+                            <React.Fragment key={i}>
+                              <Grid item xs={6}>
+                                <Typography variant={'h5'}>
+                                  Without AI
+                                </Typography>
+                                <br/>
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                                  <Watcher id={`before-ai-${i}-${new Date().valueOf()}`} loads={arr[0]} />
+                                </Paper>
+                              </Grid>
+                              <Grid item xs={6}>
+                                <Typography variant={'h5'}>
+                                  {`With AI ${same ? ' (already fine)' : ''}`}
+                                </Typography>
+                                <br/>
 
-                              <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                                <Watcher id={`after-ai-${i}`} loads={after} />
-                              </Paper>
-                            </Grid>
-                          </React.Fragment>
+                                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                                  <Watcher id={`after-ai-${i}-${new Date().valueOf()}`} loads={arr[1]} />
+                                </Paper>
+                              </Grid>
+                            </React.Fragment>
+                        )
+                      }
                       )}
                     </Grid>
                     <Copyright sx={{ pt: 4 }} />

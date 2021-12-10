@@ -3,7 +3,7 @@ import {Chart} from "react-google-charts";
 
 export default function Watcher(props) {
   const loads = props.loads || [];
-  const max = Math.max(...loads);
+  const max = 100;
   const data = loads.map((load, i) => [`Order-${i+1}`, load, max-load]);
   data.unshift([
     "Name",

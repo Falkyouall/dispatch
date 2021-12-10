@@ -4,6 +4,7 @@
     <list default="true" id="15baae2d-fcea-4e45-9086-a90ebee584d1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Dashboard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/EXAMPLE_POST.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/EXAMPLE_POST.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Presentation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Watcher.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Watcher.js" afterDir="false" />
     </list>
@@ -44,23 +45,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1639126719339</updated>
-      <workItem from="1639126721158" duration="7322000" />
+      <workItem from="1639126721158" duration="12084000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/Dashboard.js</url>
-          <line>285</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

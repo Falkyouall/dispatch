@@ -21,7 +21,7 @@ const slides = [
         title: 'Noticing the difference',
         description: 'For some time we have observed dispatchers updating their processes.\n' +
             'We wanted to use artificial intelligence to determine which criteria dispatchers use to make changes.\n' +
-            'For this purpose, we have imported the following properties from tours.',
+            'For this purpose, we have imported the following features from tours.',
         icon: 'https://media.giphy.com/media/KeuFUkFtP05s0f3Egj/giphy.gif'
     },
     {
@@ -31,17 +31,17 @@ const slides = [
     },
     {
         title: 'Utilisation of the vehicle',
-        description: 'As another label we have decided to use the maximum utilization of the vehicle. Would the dispatcher re-sort according to this criterion?',
+        description: 'As another feature we have decided to use the maximum utilization of the vehicle. Would the dispatcher re-sort according to this criterion?',
         icon: 'https://media.giphy.com/media/KyyJRhwZClyEM/giphy.gif'
     },
     {
         title: 'Position of the heaviest',
-        description: 'We also decided to add a label that describes the position of the heaviest shipments.',
+        description: 'We also decided to add a feature that describes the position of the heaviest shipments.',
         icon: 'https://media.giphy.com/media/EMRVGHZ5ZiV7a/giphy.gif'
     },
     {
       title: 'Shipments over time',
-      description: 'The last label refers to the charge over time, could it be that there is a relationship between charge weight and time within a tour? \n' +
+      description: 'The last feature refers to the charge over time, could it be that there is a relationship between charge weight and time within a tour? \n' +
           '\n Lets have a look at Historical data in the Weightwatcher.',
       icon: 'https://media.giphy.com/media/pPhyAv5t9V8djyRFJH/giphy.gif'
     }
