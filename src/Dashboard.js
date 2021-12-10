@@ -18,7 +18,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import DashboardOutlined from '@mui/icons-material/DashboardOutlined';
-import {Input, ListItem, ListItemIcon, ListItemText, Pagination, Stack, Tab} from "@mui/material";
+import {Input, ListItem, ListItemIcon, ListItemText, ListSubheader, Pagination, Stack, Tab} from "@mui/material";
 import logo from './logo.svg';
 import history from './history';
 import {useEffect, useState} from "react";
@@ -26,6 +26,7 @@ import {TabContext, TabList, TabPanel} from "@mui/lab";
 import UnstyledButtonCustom from "./CoolButton";
 import Watcher from "./Watcher";
 import Presentation from "./Presentation";
+import {PlayCircleFilledWhiteOutlined} from "@mui/icons-material";
 
 function Copyright(props) {
   return (
@@ -88,7 +89,7 @@ const Values = Object.values(history).filter(x => x.changed === true);
 
 function DashboardContent() {
   const [openDrawer, setOpenDrawer] = useState(true);
-  const [openDialog, setDialog] = useState(true);
+  const [openDialog, setDialog] = useState(false);
   const [value, setValue] = useState('1');
   const [plannings, setPlanningData] = useState([]);
   const [slice ,setSlice] = useState(Values.slice(0, 10))
@@ -110,12 +111,9 @@ function DashboardContent() {
     const data = JSON.parse(event.target.result);
     const url = 'http://localhost:10000/loads_profile'
 
-  // TODO UNCOMMENT ME AND MAKE ME WORK
     fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(data)
     })
       .then((res) => res.json())
@@ -163,11 +161,6 @@ function DashboardContent() {
               >
                 Smart Update Dashboard
               </Typography>
-              <IconButton color="inherit">
-                <Badge badgeContent={0} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
             </Toolbar>
           </AppBar>
           <Drawer variant="permanent" open={openDrawer}>
@@ -194,7 +187,16 @@ function DashboardContent() {
               </ListItem>
             </List>
             <Divider />
-            {/*<List>{secondaryListItems}</List>*/}
+            <List>
+              <ListItem button onClick={() => setDialog(true)}>
+                <ListItemIcon>
+                  <PlayCircleFilledWhiteOutlined />
+                </ListItemIcon>
+                <ListItemText primary="Presentation" />
+              </ListItem>
+            </List>
+            <Divider />
+
           </Drawer>
           <Box
               component="main"
@@ -281,7 +283,7 @@ function DashboardContent() {
                             <img src="https://media.giphy.com/media/hEc4k5pN17GZq/giphy.gif" alt="this slowpoke moves"  width="500" />
                           </Box>
                       : null}
-                      {plannings.map(([[before, after]], i) =>
+                      {value === '3' && plannings.map(([[before, after]], i) =>
                           <React.Fragment key={i}>
                             <Grid item xs={6}>
                               <Typography variant={'h5'}>
@@ -289,7 +291,7 @@ function DashboardContent() {
                               </Typography>
                               <br/>
                               <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                                <Watcher id={`before-${i}`} loads={before} />
+                                <Watcher id={`before-ai-${i}`} loads={before} />
                               </Paper>
                             </Grid>
                             <Grid item xs={6}>
@@ -299,7 +301,7 @@ function DashboardContent() {
                               <br/>
 
                               <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                                <Watcher id={`after-${i}`} loads={after} />
+                                <Watcher id={`after-ai-${i}`} loads={after} />
                               </Paper>
                             </Grid>
                           </React.Fragment>

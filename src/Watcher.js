@@ -13,6 +13,7 @@ export default function Watcher(props) {
   return (
       <Chart
           graphID={props.id}
+          key={props.id}
           chartType="ColumnChart"
           explorer={{
             actions: ['dragToZoom', 'rightClickToReset'],
@@ -29,6 +30,10 @@ export default function Watcher(props) {
               theme.palette.success.main
             ],
             chartArea: {left:0,top:0,width:'100%',height:'80%'},
+            viewWindow: {
+              min: [7, 30, 0],
+              max: [17, 30, 0]
+            },
             ticks: [
               { v: 1, f: 'Quant' },
               { v: 2, f: 'Verbal' },
@@ -37,7 +42,7 @@ export default function Watcher(props) {
           }}
           graph_id="Loads"
           width="100%"
-          height="450px"
+          height="100%"
       />
   )
 }
