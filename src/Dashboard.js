@@ -17,7 +17,7 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import DashboardIcon from '@mui/icons-material/Dashboard';
+import DashboardOutlined from '@mui/icons-material/DashboardOutlined';
 import {Input, ListItem, ListItemIcon, ListItemText, Pagination, Stack, Tab} from "@mui/material";
 import logo from './logo.svg';
 import history from './history';
@@ -87,17 +87,14 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const Values = Object.values(history).filter(x => x.changed === true);
 
 function DashboardContent() {
-  const [open, setOpen] = useState(true);
+  const [openDrawer, setOpenDrawer] = useState(true);
+  const [openDialog, setDialog] = useState(true);
   const [value, setValue] = useState('1');
   const [plannings, setPlanningData] = useState([]);
   const [slice ,setSlice] = useState(Values.slice(0, 10))
 
-/*  useEffect(() => {
-    setPlanningData([...plannings, [[5,1,2,1,1],[7,5,1,1,5],[8,7,3,5,5,5,5]]])
-  }, [])*/
-
   const toggleDrawer = () => {
-    setOpen(!open);
+    setOpenDrawer(!openDrawer);
   };
 
   const handleChange = (event, newValue) => {
@@ -108,7 +105,6 @@ function DashboardContent() {
     reader.onload = onReaderLoad;
     reader.readAsText(event.target.files[0]);
   };
-
 
   const onReaderLoad = (event) => {
     const data = JSON.parse(event.target.result);
@@ -122,9 +118,9 @@ function DashboardContent() {
       },
       body: JSON.stringify(data)
     })
-      .then((response) => response.json())
+      .then((res) => res.json())
       .then(response => {
-        console.log(response);
+        console.log({response})
         setPlanningData([...plannings, response]);
         setValue('3');
       })
@@ -140,7 +136,7 @@ function DashboardContent() {
 
         <Box sx={{ display: 'flex' }}>
           <CssBaseline />
-          <AppBar position="absolute" open={open} color={'primary'}>
+          <AppBar position="absolute" open={openDrawer} color={'primary'}>
             <Toolbar
                 sx={{
                   pr: '24px', // keep right padding when drawer closed
@@ -153,7 +149,7 @@ function DashboardContent() {
                   onClick={toggleDrawer}
                   sx={{
                     marginRight: '36px',
-                    ...(open && { display: 'none' }),
+                    ...(openDrawer && { display: 'none' }),
                   }}
               >
                 <MenuIcon />
@@ -174,7 +170,7 @@ function DashboardContent() {
               </IconButton>
             </Toolbar>
           </AppBar>
-          <Drawer variant="permanent" open={open}>
+          <Drawer variant="permanent" open={openDrawer}>
             <Toolbar
                 sx={{
                   display: 'flex',
@@ -192,7 +188,7 @@ function DashboardContent() {
             <List>
               <ListItem button>
                 <ListItemIcon>
-                  <DashboardIcon />
+                  <DashboardOutlined />
                 </ListItemIcon>
                 <ListItemText primary="Dashboard" />
               </ListItem>
@@ -217,7 +213,7 @@ function DashboardContent() {
               <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider',  position:'sticky', top:0 }}>
                   <TabList onChange={handleChange} aria-label="lab API tabs example">
-                    <Tab label="Historical Data" value="1" />
+                    <Tab label="Training Data" value="1" />
                     <Tab label="New Upload" value="2" />
                     <Tab label="Plannings" value="3" />
                   </TabList>
@@ -285,7 +281,7 @@ function DashboardContent() {
                             <img src="https://media.giphy.com/media/hEc4k5pN17GZq/giphy.gif" alt="this slowpoke moves"  width="500" />
                           </Box>
                       : null}
-                      {plannings.map(([before, after], i) =>
+                      {plannings.map(([[before, after]], i) =>
                           <React.Fragment key={i}>
                             <Grid item xs={6}>
                               <Typography variant={'h5'}>

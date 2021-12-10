@@ -4,7 +4,7 @@ import {Chart} from "react-google-charts";
 export default function Watcher(props) {
   const loads = props.loads || [];
   const max = Math.max(...loads);
-  const data = loads.map((load, i) => [`Load-${i+1}`, load, max-load]);
+  const data = loads.map((load, i) => [`Order-${i+1}`, load, max-load]);
   data.unshift([
     "Name",
     "Occupied",
